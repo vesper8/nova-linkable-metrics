@@ -1,85 +1,91 @@
 <template>
-    <BasePartitionMetric
-        :title="card.name"
-        :chart-data="chartData"
-        :loading="loading"
-        :url="this.card.url"
-    />
+  <BasePartitionMetric
+    :title="card.name"
+    :chart-data="chartData"
+    :partition-label-link-map="partitionLabelLinkMap"
+    :loading="loading"
+    :url="this.card.url"
+  />
 </template>
 
 <script>
-
-import { Minimum } from 'laravel-nova'
-import BasePartitionMetric from './Base/PartitionMetric'
-import Partitionmetric from "../../../../../laravel/nova/resources/js/components/Metrics/Partitionmetric.vue";
+import { Minimum } from 'laravel-nova';
+import BasePartitionMetric from './Base/PartitionMetric';
+import PartitionMetric from '@/components/Metrics/PartitionMetric';
 
 export default {
+  extends: PartitionMetric,
 
-    extends: PartitionMetric,
+  components: {
+    BasePartitionMetric,
+  },
 
-    components: {
-        BasePartitionMetric
+  props: {
+    card: {
+      type: Object,
+      required: true,
     },
 
-    props: {
-        card: {
-            type: Object,
-            required: true,
-        },
-
-        resourceName: {
-            type: String,
-            default: '',
-        },
-
-        resourceId: {
-            type: [Number, String],
-            default: '',
-        },
-
-        lens: {
-            type: String,
-            default: '',
-        },
+    resourceName: {
+      type: String,
+      default: '',
     },
 
-    data: () => ({
-        loading: true,
-        chartData: [],
-    }),
+    resourceId: {
+      type: [Number, String],
+      default: '',
+    },
 
-    watch: {
-        resourceId() {
-            this.fetch()
+    lens: {
+      type: String,
+      default: '',
+    },
+  },
+
+  data: () => ({
+    loading: true,
+    chartData: [],
+    partitionLabelLinkMap: [],
+  }),
+
+  watch: {
+    resourceId() {
+      this.fetch();
+    },
+  },
+
+  created() {
+    this.fetch();
+  },
+
+  methods: {
+    fetch() {
+      this.loading = true;
+
+      Minimum(Nova.request(this.metricEndpoint)).then(
+        ({
+          data: {
+            value: { value, partitionLabelLinkMap },
+          },
+        }) => {
+          this.chartData = value;
+          this.partitionLabelLinkMap = partitionLabelLinkMap;
+          this.loading = false;
         },
+      );
     },
-
-    created() {
-        this.fetch()
+  },
+  computed: {
+    metricEndpoint() {
+      const lens = this.lens !== '' ? `/lens/${this.lens}` : '';
+      if (this.resourceName && this.resourceId) {
+        return `/nova-api/${this.resourceName}${lens}/${this.resourceId}/metrics/${this.card.uriKey}`;
+      } else if (this.resourceName) {
+        return `/nova-api/${this.resourceName}${lens}/metrics/${this.card.uriKey}`;
+      } else {
+        return `/nova-api/metrics/${this.card.uriKey}`;
+      }
     },
-
-    methods: {
-        fetch() {
-            this.loading = true
-
-            Minimum(Nova.request(this.metricEndpoint)).then(({ data: { value: { value } } }) => {
-                this.chartData = value
-                this.loading = false
-            })
-        },
-    },
-    computed: {
-        metricEndpoint() {
-            const lens = this.lens !== '' ? `/lens/${this.lens}` : ''
-            if (this.resourceName && this.resourceId) {
-                return `/nova-api/${this.resourceName}${lens}/${this.resourceId}/metrics/${this.card.uriKey}`
-            } else if (this.resourceName) {
-                return `/nova-api/${this.resourceName}${lens}/metrics/${this.card.uriKey}`
-            } else {
-                return `/nova-api/metrics/${this.card.uriKey}`
-            }
-        },
-    },
-
-}
+  },
+};
 </script>

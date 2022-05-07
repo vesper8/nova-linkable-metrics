@@ -15,10 +15,13 @@ trait LinkablePartition
     public function result(array $value)
     {
         $linkablePartitionResult = new LinkablePartitionResult($value);
-        if (!empty($this->url)) {
+
+        if (! empty($this->url)) {
             $linkablePartitionResult->url($this->url);
         }
+
+        // ray($linkablePartitionResult);
+
         return $linkablePartitionResult;
     }
 }
-

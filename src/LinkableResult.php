@@ -27,15 +27,16 @@ trait LinkableResult
     }
 
     /**
-     * Set a link to a route
+     * Set a link to a route.
      */
     public function route($routeName, array $params = [], array $query = [])
     {
         $route = [
             'name' => $routeName,
             'params' => $params,
-            'query' => $query
+            'query' => $query,
         ];
+
         return $this->url(json_encode($route));
     }
 
@@ -50,5 +51,4 @@ trait LinkableResult
             'url' => $this->url,
         ]);
     }
-
 }

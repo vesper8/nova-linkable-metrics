@@ -19,7 +19,7 @@
 import { Minimum } from 'laravel-nova'
 
 import BaseValueMetric from './Base/ValueMetric'
-import ValueMetric from "../../../../../laravel/nova/resources/js/components/Metrics/ValueMetric.vue";
+import ValueMetric from "@/components/Metrics/ValueMetric";
 
 export default {
 

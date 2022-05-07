@@ -20,7 +20,7 @@ import _ from 'lodash'
 import { InteractsWithDates, Minimum } from 'laravel-nova'
 
 import BaseTrendMetric from './Base/TrendMetric'
-import TrendMetric from "../../../../../laravel/nova/resources/js/components/Metrics/TrendMetric.vue";
+import TrendMetric from "@/components/Metrics/TrendMetric";
 
 export default {
     name: 'TrendMetric',

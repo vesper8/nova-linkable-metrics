@@ -6,6 +6,9 @@ mix.setPublicPath('dist')
     .sass('resources/sass/card.scss', 'css')
     .webpackConfig({
         resolve: {
-            symlinks: false            
+            alias: {
+                '@': path.resolve(__dirname, '../../laravel/nova/resources/js/'),
+            },            
+            symlinks: false,
         },
-    })
+    });
