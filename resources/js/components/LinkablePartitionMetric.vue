@@ -11,7 +11,7 @@
 
 import { Minimum } from 'laravel-nova'
 import BasePartitionMetric from './Base/PartitionMetric'
-import PartitionMetric from '@/components/Metrics/PartitionMetric'
+import Partitionmetric from "../../../../../laravel/nova/resources/js/components/Metrics/Partitionmetric.vue";
 
 export default {
 
